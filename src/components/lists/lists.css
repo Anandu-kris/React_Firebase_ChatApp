@@ -1,0 +1,21 @@
+.lists {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  /* Chrome, Edge, Safari, Brave Scrollbar */
+  &::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: rgba(17, 25, 40, 0.2); /* Background of the track */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(17, 25, 40, 0.8); /* Scrollbar color */
+    border-radius: 10px;
+  }
+}
