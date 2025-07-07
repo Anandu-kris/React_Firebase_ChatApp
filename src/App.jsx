@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Chats from "./components/chats/chats";
+import Chats from "./components/chats/Chats";
 import Details from "./components/details/details";
 import Lists from "./components/lists/lists";
 import Notification from "./components/notification/Notification";
