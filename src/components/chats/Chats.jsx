@@ -112,7 +112,7 @@ const Chats = () => {
         <div className="icons">
           <img src="./phone.png" alt="" />
           <img src="./video.png" alt="" />
-          <img src="./info.png" alt=""/>
+          <img src="./info.png" alt="" />
         </div>
       </div>
       <div className="center">
@@ -155,6 +155,11 @@ const Chats = () => {
         </div>
         <input
           type="text"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSend();
+            }
+          }}
           placeholder={
             isCurrentUserBlocked || isReceiverBlocked
               ? "You cannot send a message"

@@ -6,7 +6,7 @@
   border-right: 1px solid #dddddd35;
   height: 100%;
   .top {
-    padding: 20px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,7 +75,7 @@
     gap: 20px;
 
     .message {
-      max-width: 60%;
+      max-width: 50%;
       display: flex;
       gap: 20px;
 
@@ -104,19 +104,20 @@
 
         img {
           width: 100%;
-          height: 300px;
+          height: 200px;
           border-radius: 10px;
           object-fit: cover;
         }
 
         p {
-          padding: 20px;
+          font-size: small;
+          padding: 10px;
           background-color: rgba(17, 25, 40, 0.3);
           border-radius: 10px;
         }
 
         span {
-          font-size: 13px;
+          font-size: 10px;
         }
       }
     }
@@ -138,16 +139,22 @@
       width: 20px;
       height: 20px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        opacity: 0.8;
+      }
     }
     input {
       background-color: rgba(17, 25, 40, 0.6);
-      padding: 10px;
+      padding: 10px 10px;
       border: none;
       outline: none;
       color: #fff;
       flex: 1;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 12px;
 
       &:disabled {
         cursor: not-allowed;
@@ -155,6 +162,14 @@
     }
     .emoji {
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      img {
+        width: 20px;
+        height: 20px;
+      }
       .picker {
         position: absolute;
         bottom: 50px;
@@ -164,7 +179,7 @@
     .sendButton {
       background-color: #1da1f2;
       color: #fff;
-      padding: 10px 20px;
+      padding: 5px 20px;
       font-size: 14px;
       cursor: pointer;
       border: none;

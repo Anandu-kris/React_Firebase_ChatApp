@@ -20,7 +20,10 @@ import {
   ToggleButton,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+// Styled Components
 const AvatarInput = styled("input")({
   display: "none",
 });
@@ -39,33 +42,35 @@ const ToggleSwitch = styled(ToggleButtonGroup)({
   marginBottom: "20px",
   border: "none",
   display: "flex",
-  gap: "40px",
+  gap: "10px",
 });
 
-const ItemBox = styled(Box)({
-  flex: 1,
+const SignUpWrapper = styled(Box)({
+  width: "100%",
+  maxWidth: "400px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "16px",
+  paddingBottom: "40px",
+});
+
+const FormWrapper = styled(Box)({
+  width: "100%",
+  maxWidth: "400px",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   gap: "20px",
-});
-
-const StyledBox = styled(Box)({
-  flex: 1,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "20px",
-  marginTop: "100px"
 });
 
 const Form = styled("form")({
-  marginTop: "20px",
+  marginTop: "5px",
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
   gap: "30px",
+  width: "100%",
+  maxWidth: "20rem", // Match all field widths
 });
 
 const CustomToggleButton = styled(ToggleButton)({
@@ -82,12 +87,16 @@ const CustomToggleButton = styled(ToggleButton)({
 });
 
 const StyledTextField = styled(TextField)({
-  width: "25rem",
+  width: "100%",
+  marginBottom: "-10px",
   backgroundColor: "rgba(17, 25, 40, 0.9)",
   color: "white",
+  alignContent: "center",
   borderRadius: "10px",
   "& .MuiInputBase-input": {
     color: "white",
+    padding: "12px 10px",
+    alignContent: "center",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -108,33 +117,31 @@ const StyledTextField = styled(TextField)({
   },
   "& .MuiInputBase-input::placeholder": {
     color: "white",
-    opacity: 1,
+    opacity: 0.25,
   },
 });
 
 const StyledButton = styled(Button)({
   width: "100%",
-  fontSize: "medium",
-  padding: "20px",
+  fontSize: "small",
+  padding: "8px",
   backgroundColor: "#1f8ef1",
   color: "white",
   borderRadius: "10px",
   cursor: "pointer",
-  fontWeight: 500,
+  fontWeight: 300,
   "&:disabled": {
     cursor: "not-allowed",
     backgroundColor: "#1f8ff19c",
   },
 });
 
+// Component
 const Login = () => {
-  const [avatar, setAvatar] = useState({
-    file: null,
-    url: "",
-  });
-
+  const [avatar, setAvatar] = useState({ file: null, url: "" });
   const [loading, setLoading] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleAvatar = (e) => {
     if (e.target.files[0]) {
@@ -149,7 +156,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.target);
-
     const { username, email, password } = Object.fromEntries(formData);
 
     if (!username || !email || !password)
@@ -166,7 +172,6 @@ const Login = () => {
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
       const imgUrl = await upload(avatar.file);
 
       await setDoc(doc(db, "users", res.user.uid), {
@@ -177,9 +182,7 @@ const Login = () => {
         blocked: [],
       });
 
-      await setDoc(doc(db, "userchats", res.user.uid), {
-        chats: [],
-      });
+      await setDoc(doc(db, "userchats", res.user.uid), { chats: [] });
 
       toast.success("Account created! You can login now!");
     } catch (err) {
@@ -193,7 +196,6 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     const formData = new FormData(e.target);
     const { email, password } = Object.fromEntries(formData);
 
@@ -219,27 +221,32 @@ const Login = () => {
       </ToggleSwitch>
 
       {isRegistering ? (
-        <ItemBox>
-          <Typography variant="h4">Create an Account</Typography>
-          <Form onSubmit={handleRegister}>
-            <label htmlFor="avatar-upload">
-              <Avatar
-                src={avatar.url || "./avatar.png"}
-                sx={{
-                  width: 80,
-                  height: 80,
-                  cursor: "pointer",
-                  marginBottom: 2,
-                  marginLeft: 2,
-                }}
-              />
-              <Typography>Upload an image</Typography>
-            </label>
-            <AvatarInput
-              type="file"
-              id="avatar-upload"
-              onChange={handleAvatar}
+        <SignUpWrapper>
+          <Typography variant="h6">Create an Account</Typography>
+          <label
+            htmlFor="avatar-upload"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar
+              src={avatar.url || "./avatar.png"}
+              sx={{
+                width: 50,
+                height: 50,
+                cursor: "pointer",
+                marginBottom: "4px",
+              }}
             />
+            <Typography variant="body2" align="center">
+              Upload an image
+            </Typography>
+          </label>
+          <AvatarInput type="file" id="avatar-upload" onChange={handleAvatar} />
+
+          <Form onSubmit={handleRegister}>
             <StyledTextField
               label="Username"
               name="username"
@@ -256,23 +263,82 @@ const Login = () => {
               {loading ? <CircularProgress size={24} /> : "Sign Up"}
             </StyledButton>
           </Form>
-        </ItemBox>
+        </SignUpWrapper>
       ) : (
-        <StyledBox >
-          <Typography variant="h4">Welcome back,</Typography>
+        <FormWrapper>
+          <Typography variant="h6">Welcome back,</Typography>
           <Form onSubmit={handleLogin}>
-            <StyledTextField label="Email" name="email" variant="outlined" />
             <StyledTextField
-              label="Password"
-              name="password"
-              type="password"
+              name="email"
+              label="Email"
+              placeholder="Enter your email"
+              autoComplete="email"
+              autoFocus
+              fullWidth
+              required
+              type="email"
               variant="outlined"
             />
+            <StyledTextField
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              fullWidth
+              required
+              type={showPassword ? "text" : "password"}
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <span
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginRight: "-2px",
+                      color: "white",
+                    }}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? (
+                      <VisibilityOff sx={{ width: "20px", height: "20px" }} />
+                    ) : (
+                      <Visibility sx={{ width: "20px", height: "20px" }} />
+                    )}
+                  </span>
+                ),
+              }}
+            />
+
+            {/* Remember me & forgot password */}
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                fontSize: "14px",
+                color: "white",
+                mt: "2px",
+              }}
+            >
+              <label
+                style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              >
+                <input type="checkbox" style={{ accentColor: "#1f8ef1" }} />
+                Remember Me
+              </label>
+              <a href="#" style={{ color: "#bbb", fontSize: "13px" }}>
+                Forgot Password?
+              </a>
+            </Box>
+
             <StyledButton type="submit" variant="contained" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : "Sign In"}
+              {loading ? <CircularProgress size={24} /> : "Login"}
             </StyledButton>
           </Form>
-        </StyledBox>
+        </FormWrapper>
       )}
     </StyledContainer>
   );
